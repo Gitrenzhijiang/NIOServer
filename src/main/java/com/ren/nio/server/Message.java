@@ -1,9 +1,11 @@
-package com.jenkov.nioserver;
+package com.ren.nio.server;
 
 import java.nio.ByteBuffer;
 
 /**
  * Created by jjenkov on 16-10-2015.
+ * 
+ * 连续内存载体. 这里用作socket 的http请求的载体, http响应内容的载体.
  */
 public class Message {
 
@@ -23,7 +25,7 @@ public class Message {
     }
 
     /**
-     * Writes data from the ByteBuffer into this message - meaning into the buffer backing this message.
+     * 将byteBuffer中的数据写到这个messageBuffer中, 如果当前容量不够, 会自动扩容.
      *
      * @param byteBuffer The ByteBuffer containing the message data to write.
      * @return
@@ -85,7 +87,7 @@ public class Message {
     /**
      * In case the buffer backing the nextMessage contains more than one HTTP message, move all data after the first
      * message to a new Message object.
-     *
+     * 当前message包含多个http消息, endIndex是第一个http消息最后一个byte的索引.
      * @param message   The message containing the partial message (after the first message).
      * @param endIndex  The end index of the first message in the buffer of the message given as parameter.
      */
@@ -95,11 +97,6 @@ public class Message {
 
         System.arraycopy(message.sharedArray, startIndexOfPartialMessage, this.sharedArray, this.offset, lengthOfPartialMessage);
     }
-
-    public int writeToByteBuffer(ByteBuffer byteBuffer){
-        return 0;
-    }
-
 
 
 }

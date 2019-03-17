@@ -1,12 +1,14 @@
-package com.jenkov.nioserver;
+package com.ren.nio.server;
 
 /**
  * A shared buffer which can contain many messages inside. A message gets a section of the buffer to use. If the
  * message outgrows the section in size, the message requests a larger section and the message is copied to that
  * larger section. The smaller section is then freed again.
- *
+ * 
  *
  * Created by jjenkov on 18-10-2015.
+ * 
+ * 连续内存池, 可以扩容.
  */
 public class MessageBuffer {
 
@@ -66,7 +68,19 @@ public class MessageBuffer {
             return false;
         }
     }
-
+    /**
+     * 回收这个消息
+     * @param message
+     */
+    public void free(Message message) {
+        if (message.capacity == CAPACITY_SMALL) {
+            smallMessageBufferFreeBlocks.put(message.offset);
+        } else if (message.capacity == CAPACITY_MEDIUM) {
+            mediumMessageBufferFreeBlocks.put(message.offset);
+        } else if (message.capacity == CAPACITY_LARGE) {
+            largeMessageBufferFreeBlocks.put(message.offset);
+        }
+    }
     private boolean moveMessage(Message message, QueueIntFlip srcBlockQueue, QueueIntFlip destBlockQueue, byte[] dest, int newCapacity) {
         int nextFreeBlock = destBlockQueue.take();
         if(nextFreeBlock == -1) return false;

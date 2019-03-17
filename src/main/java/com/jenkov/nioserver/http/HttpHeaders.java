@@ -10,6 +10,10 @@ public class HttpHeaders {
     public static int HTTP_METHOD_PUT    = 3;
     public static int HTTP_METHOD_HEAD   = 4;
     public static int HTTP_METHOD_DELETE = 5;
+    /**
+     * 待定的方法
+     */
+    public static int HTTP_METHOD_OPTIONS= 6;
 
     public int httpMethod    = 0;
 
@@ -20,8 +24,14 @@ public class HttpHeaders {
 
     public int bodyStartIndex = 0;
     public int bodyEndIndex   = 0;
+    @Override
+    public String toString() {
+        return "HttpHeaders [httpMethod=" + httpMethod + ", hostStartIndex=" + hostStartIndex + ", hostEndIndex="
+                + hostEndIndex + ", contentLength=" + contentLength + ", bodyStartIndex=" + bodyStartIndex
+                + ", bodyEndIndex=" + bodyEndIndex + "]";
+    }
 
 
-
+    
 
 }

@@ -1,27 +1,32 @@
-package com.jenkov.nioserver;
+package com.ren.nio.server;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * Created by jjenkov on 16-10-2015.
- */
+
 public class Socket {
-
+    private static AtomicLong INIT_ID = new AtomicLong(0);
     public long socketId;
 
-    public SocketChannel  socketChannel = null;
-    public IMessageReader messageReader = null;
-    public MessageWriter  messageWriter = null;
+    public final SocketChannel  socketChannel;
+    public final IMessageReader messageReader;
+    public final MessageWriter  messageWriter;
 
     public boolean endOfStreamReached = false;
-
-    public Socket() {
-    }
-
-    public Socket(SocketChannel socketChannel) {
+    public boolean willClose = false;
+    public Socket(SocketChannel socketChannel, MessageBuffer readBuf, MessageBuffer wBuf, 
+            IMessageReaderFactory readFactory) {
         this.socketChannel = socketChannel;
+        
+        messageWriter = new MessageWriter(wBuf);
+        
+        messageReader = readFactory.createMessageReader();
+        
+        messageReader.init(readBuf);
+        
+        this.socketId = INIT_ID.getAndIncrement();
     }
 
     public int read(ByteBuffer byteBuffer) throws IOException {
@@ -35,7 +40,9 @@ public class Socket {
         if(bytesRead == -1){
             this.endOfStreamReached = true;
         }
-
+        if (bytesRead == 0) {
+            this.willClose = true;
+        }
         return totalBytesRead;
     }
 

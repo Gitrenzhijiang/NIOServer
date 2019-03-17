@@ -1,13 +1,9 @@
-package com.jenkov.nioserver;
+package com.ren.nio.server;
 
 /**
- * Same as QueueFillCount, except that QueueFlip uses a flip flag to keep track of when the internal writePos has
- * "overflowed" (meaning it goes back to 0). Other than that, the two implementations are very similar in functionality.
+ * 先进先出的 数字标号容器, 有界
+ * @author REN
  *
- * One additional difference is that QueueFlip has an available() method, where this is a public variable in
- * QueueFillCount.
- *
- * Created by jjenkov on 18-09-2015.
  */
 public class QueueIntFlip {
 

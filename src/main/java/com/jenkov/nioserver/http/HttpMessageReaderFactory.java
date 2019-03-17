@@ -1,8 +1,7 @@
 package com.jenkov.nioserver.http;
 
-import com.jenkov.nioserver.IMessageReader;
-import com.jenkov.nioserver.IMessageReaderFactory;
-import com.jenkov.nioserver.MessageBuffer;
+import com.ren.nio.server.IMessageReader;
+import com.ren.nio.server.IMessageReaderFactory;
 
 /**
  * Created by jjenkov on 18-10-2015.

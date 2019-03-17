@@ -12,7 +12,8 @@ public class HttpUtil {
     private static final byte[] PUT    = new byte[]{'P','U','T'};
     private static final byte[] HEAD   = new byte[]{'H','E','A','D'};
     private static final byte[] DELETE = new byte[]{'D','E','L','E','T','E'};
-
+    private static final byte[] OPTIONS = new byte[]{'O', 'P', 'T', 'I', 'O', 'N', 'S'};
+    
     private static final byte[] HOST           = new byte[]{'H','o','s','t'};
     private static final byte[] CONTENT_LENGTH = new byte[]{'C','o','n','t','e','n','t','-','L','e','n','g','t','h'};
 
@@ -28,7 +29,7 @@ public class HttpUtil {
         //parse HTTP request line
         int endOfFirstLine = findNextLineBreak(src, startIndex, endIndex);
         if(endOfFirstLine == -1) return -1;
-
+        resolveHttpMethod(src, startIndex, httpHeaders);
 
         //parse HTTP headers
         int prevEndOfHeader = endOfFirstLine + 1;
@@ -150,6 +151,9 @@ public class HttpUtil {
         if(matches(src, startIndex, DELETE)){
             httpHeaders.httpMethod = HttpHeaders.HTTP_METHOD_DELETE;
             return;
+        }
+        if (matches(src, startIndex, OPTIONS)) {
+            httpHeaders.httpMethod = HttpHeaders.HTTP_METHOD_OPTIONS;
         }
     }
     /**
